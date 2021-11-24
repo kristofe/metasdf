@@ -11,7 +11,17 @@ import argparse
 import json
 import numpy as np
 import os
+import sys
 import trimesh
+####################################################################################
+####################################################################################
+#               HACK FOR RUNNING INSIDE VSCODE
+#sys.path.append( os.path.dirname( os.path.dirname( os.path.abspath(__file__) ) ) )
+thispath =  os.path.dirname( os.path.abspath(__file__) )
+os.chdir(thispath)
+sys.path.append('/home/kristofe/Documents/Projects/metasdf/3D')
+####################################################################################
+####################################################################################
 
 def compute_trimesh_chamfer(gt_points, gen_mesh, offset, scale, num_mesh_samples=30000):
     """
@@ -95,8 +105,8 @@ def evaluate(reconstruction_dir, data_dir):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('reconstruction_dir')
-    parser.add_argument('--data_dir', default='/media/data3/sitzmann/ShapeNetProcessedData/data')
+    parser.add_argument('--reconstruction_dir', type=str, default='reconstructions/planes_tiny_pe')
+    parser.add_argument('--data_dir', default='../data')
     args = parser.parse_args()
     
     evaluate(args.reconstruction_dir, args.data_dir)

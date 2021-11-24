@@ -63,9 +63,7 @@ planes_test_relu = {
     'data_source': '../data/', # Preprocessed data folder, following DeepSDF
     'num_epochs': 3000,
     'training_mode': 'multitask', # Either 'multitask' for composite loss or 'l1' for simple loss
-    'context_mode': 'dense', # Either 'dense' or 'levelset'
     'SDFSamplesPerScene': 24000, # Number of SDF samples drawn per scene, per iteration
-    'LevelsetSamplesPerScene': 0, # Number of Levelset samples drawn per scene, per iteration. Only needed for 'levelset' training.
     'ScenesPerBatch': 3, # Meta-batch size
     'output_dir': 'model_parameters/planes_tiny_relu', # Directory to save parameters and tensorboard files
     'reconstruction_output_dir': 'reconstructions/planes_tiny_relu', # Directory to save reconstructions, only used during reconstruction
@@ -80,12 +78,10 @@ planes_test_pe = {
     'data_source': '../data/', # Preprocessed data folder, following DeepSDF
     'num_epochs': 3000,
     'training_mode': 'multitask', # Either 'multitask' for composite loss or 'l1' for simple loss
-    'context_mode': 'dense', # Either 'dense' or 'levelset'
     'SDFSamplesPerScene': 8000, # Number of SDF samples drawn per scene, per iteration
-    'LevelsetSamplesPerScene': 0, # Number of Levelset samples drawn per scene, per iteration. Only needed for 'levelset' training.
     'ScenesPerBatch': 3, # Meta-batch size
     'output_dir': 'model_parameters/planes_tiny_relu', # Directory to save parameters and tensorboard files
-    'reconstruction_output_dir': 'reconstructions/planes_tiny_relu', # Directory to save reconstructions, only used during reconstruction
+    'reconstruction_output_dir': 'reconstructions/planes_tiny_pe', # Directory to save reconstructions, only used during reconstruction
     'lr': 5e-4,
 }
 
@@ -97,9 +93,7 @@ planes_relu = {
     'data_source': '/media/data3/sitzmann/ShapeNetProcessedData/data', # Preprocessed data folder, following DeepSDF
     'num_epochs': 3000,
     'training_mode': 'multitask', # Either 'multitask' for composite loss or 'l1' for simple loss
-    'context_mode': 'dense', # Either 'dense' or 'levelset'
     'SDFSamplesPerScene': 24000, # Number of SDF samples drawn per scene, per iteration
-    'LevelsetSamplesPerScene': 0, # Number of Levelset samples drawn per scene, per iteration. Only needed for 'levelset' training.
     'ScenesPerBatch': 32, # Meta-batch size
     'output_dir': 'model_parameters/planes_relu', # Directory to save parameters and tensorboard files
     'reconstruction_output_dir': 'reconstructions/planes_relu', # Directory to save reconstructions, only used during reconstruction
@@ -113,9 +107,7 @@ tables_relu = {
     'data_source': '/media/data3/sitzmann/ShapeNetProcessedData/data',
     'num_epochs': 3000,
     'training_mode': 'multitask',
-    'context_mode': 'dense',
     'SDFSamplesPerScene': 24000,
-    'LevelsetSamplesPerScene': 0,
     'ScenesPerBatch': 32,
     'output_dir': 'model_parameters/tables_relu',
     'reconstruction_output_dir': 'reconstructions/tables_relu',
@@ -130,9 +122,7 @@ benches_relu = {
     'data_source': '/media/data3/sitzmann/ShapeNetProcessedData/data',
     'num_epochs': 3000,
     'training_mode': 'multitask',
-    'context_mode': 'dense',
     'SDFSamplesPerScene': 24000,
-    'LevelsetSamplesPerScene': 0,
     'ScenesPerBatch': 32,
     'output_dir': 'model_parameters/benches_relu',
     'reconstruction_output_dir': 'reconstructions/benches_relu',
@@ -147,9 +137,7 @@ planes_pe = {
     'data_source': '/media/data3/sitzmann/ShapeNetProcessedData/data',
     'num_epochs': 3000,
     'training_mode': 'multitask',
-    'context_mode': 'dense',
     'SDFSamplesPerScene': 8000,
-    'LevelsetSamplesPerScene': 0,
     'ScenesPerBatch': 28,
     'output_dir': 'model_parameters/planes_pe',
     'reconstruction_output_dir': 'reconstructions/planes_pe',
@@ -164,9 +152,7 @@ tables_pe = {
     'data_source': '/media/data3/sitzmann/ShapeNetProcessedData/data',
     'num_epochs': 3000,
     'training_mode': 'multitask',
-    'context_mode': 'dense',
     'SDFSamplesPerScene': 8000,
-    'LevelsetSamplesPerScene': 0,
     'ScenesPerBatch': 28,
     'output_dir': 'model_parameters/tables_pe',
     'reconstruction_output_dir': 'reconstructions/tables_pe',
@@ -181,9 +167,7 @@ benches_pe = {
     'data_source': '/media/data3/sitzmann/ShapeNetProcessedData/data',
     'num_epochs': 3000,
     'training_mode': 'multitask',
-    'context_mode': 'dense',
     'SDFSamplesPerScene': 8000,
-    'LevelsetSamplesPerScene': 0,
     'ScenesPerBatch': 28,
     'output_dir': 'model_parameters/benches_pe',
     'reconstruction_output_dir': 'reconstructions/benches_pe',
@@ -198,9 +182,7 @@ benches_debug = {
     'data_source': '/media/data3/sitzmann/ShapeNetProcessedData/data',
     'num_epochs': 3000,
     'training_mode': 'multitask',
-    'context_mode': 'dense',
     'SDFSamplesPerScene': 8000,
-    'LevelsetSamplesPerScene': 0,
     'ScenesPerBatch': 32,
     'output_dir': 'model_parameters/benches_debug',
     'reconstruction_output_dir': 'reconstructions/benches_debug',

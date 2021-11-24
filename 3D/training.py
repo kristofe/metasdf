@@ -20,7 +20,7 @@ from torch.utils.tensorboard import SummaryWriter
 torch.backends.cudnn.benchmark = True
 
 
-def train_epoch(model, dataloader, training_mode, context_mode, optimizer):
+def train_epoch(model, dataloader, training_mode, optimizer):
     model.train()
     epoch_train_misclassification_percentage = 0
     epoch_train_loss = 0
@@ -77,7 +77,7 @@ def train_epoch(model, dataloader, training_mode, context_mode, optimizer):
     
     return epoch_train_loss, epoch_train_misclassification_percentage
     
-def val_epoch(model, dataloader, training_mode, context_mode):
+def val_epoch(model, dataloader, training_mode):
     epoch_misclassification_percentage = 0
     epoch_loss = 0
 
@@ -125,13 +125,13 @@ def val_epoch(model, dataloader, training_mode, context_mode):
     epoch_loss/=len(dataloader)
     return epoch_loss, epoch_misclassification_percentage
 
-def train(model, optimizer, scheduler, dataloader, start_epoch, num_epochs, training_mode, context_mode, output_dir='./model_parameters/', save_freq=100, val_dataloader=None):
+def train(model, optimizer, scheduler, dataloader, start_epoch, num_epochs, training_mode, output_dir='./model_parameters/', save_freq=100, val_dataloader=None):
     writer = SummaryWriter(output_dir)
         
     for epoch in tqdm(range(start_epoch, num_epochs + 1)):
         
-        epoch_train_loss, epoch_train_misclassification_percentage = train_epoch(model, dataloader, training_mode, context_mode, optimizer)
-        epoch_val_loss, epoch_val_misclassification_percentage = val_epoch(model, val_dataloader, training_mode, context_mode)
+        epoch_train_loss, epoch_train_misclassification_percentage = train_epoch(model, dataloader, training_mode, optimizer)
+        epoch_val_loss, epoch_val_misclassification_percentage = val_epoch(model, val_dataloader, training_mode)
         
         scheduler.step()
 
