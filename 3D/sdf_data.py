@@ -18,18 +18,14 @@ import skimage.measure
 def get_instance_filenames(data_source, split):
     npzfiles = []
     for dataset in split:
-        for class_name in split[dataset]:
-            for instance_name in split[dataset][class_name]:
-                instance_filename = os.path.join(
-                    dataset, class_name, instance_name + ".npz"
-                )
-                if not os.path.isfile(
-                    os.path.join(data_source, 'SdfSamples', instance_filename)
-                ):
-                    continue
-                    
+        for instance_filename in split[dataset]:
+            if not os.path.isfile(
+                os.path.join(data_source, instance_filename)
+            ):
+                continue
                 
-                npzfiles += [instance_filename]
+            
+            npzfiles += [instance_filename]
     print(f"Found {len(npzfiles)} files.")
     return npzfiles
 

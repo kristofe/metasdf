@@ -68,10 +68,10 @@ if __name__ == '__main__':
     if args.is_new_data:
         DSet = SDFDataset
 
-    dataset = DSET(
+    dataset = DSet(
         curriculum['data_source'], train_split, subsampleSDF=curriculum['SDFSamplesPerScene'], load_ram=True
     )
-    val_dataset = DSET(
+    val_dataset = DSet(
         curriculum['data_source'], val_split, subsampleSDF=curriculum['SDFSamplesPerScene'], load_ram=True
     )
         
