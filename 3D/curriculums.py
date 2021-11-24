@@ -54,6 +54,21 @@ def ReLUMetaSDF():
 
         return model
 
+chairs_kds_pe = {
+    'model': PEMetaSDF(),
+    'train_split': '../splits/chair_train.json', # Train split file, following DeepSDF's format
+    'val_split': '../splits/chair_test.json',    # Val split if you have one
+    'test_split': '../splits/chair_test.json',   # Test split, used only for reconstruction
+    'data_source': '../data/', # Preprocessed data folder, following DeepSDF
+    'num_epochs': 3000,
+    'training_mode': 'multitask', # Either 'multitask' for composite loss or 'l1' for simple loss
+    'SDFSamplesPerScene': 20000, # Number of SDF samples drawn per scene, per iteration
+    'ScenesPerBatch': 3, # Meta-batch size
+    'output_dir': 'model_parameters/chairs_kds_relu', # Directory to save parameters and tensorboard files
+    'reconstruction_output_dir': 'reconstructions/chairs_kds_pe', # Directory to save reconstructions, only used during reconstruction
+    'lr': 5e-4,
+}
+
 
 planes_test_relu = {
     'model': ReLUMetaSDF(),

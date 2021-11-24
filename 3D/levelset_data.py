@@ -143,7 +143,7 @@ class LevelsetDataset(torch.utils.data.Dataset):
     def get_filenames(self, new_idx):
         instance_name = os.path.splitext(self.npyfiles[new_idx])[0]#.split('/')[-1]
         sdf_filename = os.path.join(self.data_source, 'SdfSamples', self.npyfiles[new_idx])
-        return sdf_filename #, levelset_filename, partial_filename, normalization_filename
+        return sdf_filename 
 
     def __getitem__(self, idx):        
         new_idx = idx
