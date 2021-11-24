@@ -59,7 +59,7 @@ chairs_kds_pe = {
     'train_split': '../splits/chair_train.json', # Train split file, following DeepSDF's format
     'val_split': '../splits/chair_test.json',    # Val split if you have one
     'test_split': '../splits/chair_test.json',   # Test split, used only for reconstruction
-    'data_source': '../data/', # Preprocessed data folder, following DeepSDF
+    'data_source': '../data/point_samples', # Preprocessed data folder, following DeepSDF
     'num_epochs': 3000,
     'training_mode': 'multitask', # Either 'multitask' for composite loss or 'l1' for simple loss
     'SDFSamplesPerScene': 20000, # Number of SDF samples drawn per scene, per iteration

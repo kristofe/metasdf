@@ -40,12 +40,14 @@ device = torch.device('cuda')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--exp_name', type=str, default='planes_test_relu')
+    parser.add_argument('--exp_name', type=str, default='chairs_kds_pe')
+    parser.add_argument('--is_new_data', action='store_true', default=False)
     parser.add_argument('--load', action='store_true', default=False)
     
     args = parser.parse_args()
     
-    args.exp_name = 'planes_test_pe'
+    args.exp_name = 'chairs_kds_pe'
+    args.is_new_data = True
     print(os.getcwd())
 
     curriculum = getattr(curriculums, args.exp_name)        
@@ -62,10 +64,14 @@ if __name__ == '__main__':
     with open(curriculum['val_split'], "r") as f:
         val_split = json.load(f)
         
-    dataset = LevelsetDataset(
+    DSet = LevelsetDataset
+    if args.is_new_data:
+        DSet = SDFDataset
+
+    dataset = DSET(
         curriculum['data_source'], train_split, subsampleSDF=curriculum['SDFSamplesPerScene'], load_ram=True
     )
-    val_dataset = LevelsetDataset(
+    val_dataset = DSET(
         curriculum['data_source'], val_split, subsampleSDF=curriculum['SDFSamplesPerScene'], load_ram=True
     )
         
