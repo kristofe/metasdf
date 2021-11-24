@@ -43,7 +43,7 @@ if __name__ == '__main__':
     
     args = parser.parse_args()
     
-    args.exp_name = 'planes_test_relu'
+    args.exp_name = 'planes_test_pe'
     print(os.getcwd())
 
     curriculum = getattr(curriculums, args.exp_name)        

@@ -37,7 +37,7 @@ if __name__ == '__main__':
     parser.add_argument('--checkpoint', default='latest.pth')
     args = parser.parse_args()
     
-    args.exp_name = 'planes_test_relu'
+    args.exp_name = 'planes_test_pe'
     curriculum = getattr(curriculums, args.exp_name)
         
     
