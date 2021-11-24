@@ -57,7 +57,7 @@ def ReLUMetaSDF():
 
 planes_test_relu = {
     'model': ReLUMetaSDF(),
-    'train_split': '../splits/planes_tiny_test.json', # Train split file, following DeepSDF's format
+    'train_split': '../splits/planes_tiny_train.json', # Train split file, following DeepSDF's format
     'val_split': '../splits/planes_tiny_test.json',    # Val split if you have one
     'test_split': '../splits/planes_tiny_test.json',   # Test split, used only for reconstruction
     'data_source': '../data/', # Preprocessed data folder, following DeepSDF
@@ -66,7 +66,7 @@ planes_test_relu = {
     'context_mode': 'dense', # Either 'dense' or 'levelset'
     'SDFSamplesPerScene': 24000, # Number of SDF samples drawn per scene, per iteration
     'LevelsetSamplesPerScene': 0, # Number of Levelset samples drawn per scene, per iteration. Only needed for 'levelset' training.
-    'ScenesPerBatch': 4, # Meta-batch size
+    'ScenesPerBatch': 3, # Meta-batch size
     'output_dir': 'model_parameters/planes_tiny_relu', # Directory to save parameters and tensorboard files
     'reconstruction_output_dir': 'reconstructions/planes_tiny_relu', # Directory to save reconstructions, only used during reconstruction
     'lr': 5e-4,
