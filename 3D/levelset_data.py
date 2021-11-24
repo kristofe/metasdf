@@ -23,19 +23,11 @@ def get_instance_filenames(data_source, split):
                 instance_filename = os.path.join(
                     dataset, class_name, instance_name + ".npz"
                 )
-                #levelset_filename = os.path.splitext(os.path.join(self.data_source, 'SurfaceSamples', self.npyfiles[new_idx]))[0] + '.ply'
-                #normalization_filename = os.path.join(self.data_source, 'NormalizationParameters', self.npyfiles[new_idx])
                 if not os.path.isfile(
                     os.path.join(data_source, 'SdfSamples', instance_filename)
                 ):
                     continue
                     
-                if not os.path.isfile(
-                    os.path.join(data_source, 'NormalizationParameters', instance_filename)):
-                    continue
-                if not os.path.isfile(
-                    os.path.join(data_source, 'SurfaceSamples', os.path.join(dataset, class_name, instance_name + ".ply"))):
-                    continue
                 
                 npzfiles += [instance_filename]
     print(f"Found {len(npzfiles)} files.")
@@ -69,21 +61,7 @@ def remove_nans(tensor):
     tensor_nan = torch.isnan(tensor[:, 3])
     return tensor[~tensor_nan, :]
 
-def load_levelset(levelset_filename, normalization_filename):    
-    normalization_params = np.load(normalization_filename)
-    
-    unormalized = torch.FloatTensor(trimesh.load(levelset_filename).vertices)
-    levelset_tensor = (unormalized + normalization_params['offset']) * normalization_params['scale']# Old version, works
-    # levelset_tensor = unormalized * normalization_params['scale'] + normalization_params['offset']
-    return levelset_tensor
-
-def load_partial(partial_filename, normalization_filename):
-    normalization_params = np.load(normalization_filename)
-    unormalized = torch.FloatTensor(trimesh.load(partial_filename).vertices)
-    partial_tensor = (unormalized + normalization_params['offset']) * normalization_params['scale']
-    return partial_tensor
-
-def read_sdf_samples_into_ram_new(sdf_filename):
+def read_sdf_samples_into_ram(sdf_filename):
     sdf_npz = np.load(sdf_filename, allow_pickle=True)
     pos_tensor = remove_nans(torch.from_numpy(sdf_npz["pos"]))
     neg_tensor = remove_nans(torch.from_numpy(sdf_npz["neg"]))
@@ -94,23 +72,8 @@ def read_sdf_samples_into_ram_new(sdf_filename):
     
     return [pos_tensor, neg_tensor]
 
-def read_sdf_samples_into_ram(sdf_filename, levelset_filename, partial_filename, normalization_params_filename, context_mode):
-    sdf_npz = np.load(sdf_filename, allow_pickle=True)
-    pos_tensor = remove_nans(torch.from_numpy(sdf_npz["pos"]))
-    neg_tensor = remove_nans(torch.from_numpy(sdf_npz["neg"]))
-    
-    levelset_tensor = torch.zeros((1,))
-    partial_tensor = torch.zeros((1,))
-    
-    if context_mode == 'levelset':
-        levelset_tensor = load_levelset(levelset_filename, normalization_params_filename)
-    if context_mode == 'partial':
-        partial_tensor = load_partial(partial_filename, normalization_params_filename)
-    
-    return [pos_tensor, neg_tensor, levelset_tensor, partial_tensor]
 
-
-def unpack_sdf_samples(sdf_filename, levelset_filename, partial_filename, normalization_filename, subsampleSDF, subsampleLevelset, context_mode):
+def unpack_sdf_samples(sdf_filename, subsampleSDF):
     npz = np.load(sdf_filename)
 
     pos_tensor = remove_nans(torch.from_numpy(npz["pos"]))
@@ -127,30 +90,13 @@ def unpack_sdf_samples(sdf_filename, levelset_filename, partial_filename, normal
 
     samples = torch.cat([sample_pos, sample_neg], 0)
     
-    if context_mode == 'levelset':
-        levelset_tensor = load_levelset(levelset_filename, normalization_filename)
-        context_idcs = np.random.choice(levelset_tensor.shape[0], subsampleLevelset, replace=False)
-        levelset_points = levelset_tensor[context_idcs]
-    elif context_mode == 'partial':
-        levelset_tensor = load_partial(partial_filename, normalization_filename)
-        context_idcs = np.random.choice(levelset_tensor.shape[0], subsampleLevelset, replace=True)
-        levelset_points = levelset_tensor[context_idcs]
-    else:
-        levelset_points = torch.zeros((1,))
         
-    return {'sdf': samples, 'levelset': levelset_points}
+    return {'sdf': samples}
 
 
-def unpack_sdf_samples_from_ram(data, subsampleSDF, subsampleLevelset):
+def unpack_sdf_samples_from_ram(data, subsampleSDF):
     pos_tensor = data[0]
     neg_tensor = data[1]
-    #levelset_tensor = data[2]
-    #partial_tensor = data[3]
-    
-    #levelset_points = levelset_tensor
-    # Subsample Levelset
-    #context_idcs = np.random.choice(levelset_tensor.shape[0], subsampleLevelset, replace=True)
-    #levelset_points = levelset_tensor[context_idcs]
     
     if not subsampleSDF:
         subsampleSDF = pos_tensor.shape[0]
@@ -166,9 +112,6 @@ def unpack_sdf_samples_from_ram(data, subsampleSDF, subsampleLevelset):
 
     samples = torch.cat([sample_pos, sample_neg], 0)
 
-    #return samples
-
-    #return {'sdf': samples, 'levelset': levelset_points, 'partial': partial_tensor}
     return {'sdf': samples}
 
 
@@ -204,22 +147,19 @@ class LevelsetDataset(torch.utils.data.Dataset):
     def get_filenames(self, new_idx):
         instance_name = os.path.splitext(self.npyfiles[new_idx])[0]#.split('/')[-1]
         sdf_filename = os.path.join(self.data_source, 'SdfSamples', self.npyfiles[new_idx])
-        levelset_filename = os.path.splitext(os.path.join(self.data_source, 'SurfaceSamples', self.npyfiles[new_idx]))[0] + '.ply'
-        normalization_filename = os.path.join(self.data_source, 'NormalizationParameters', self.npyfiles[new_idx])
-        partial_filename = os.path.join('/home/ericryanchan/depth_maps', instance_name, 'world_coords.ply')
-        return sdf_filename, levelset_filename, partial_filename, normalization_filename
+        return sdf_filename #, levelset_filename, partial_filename, normalization_filename
 
     def __getitem__(self, idx):        
         new_idx = idx
         while True:
-            sdf_filename, levelset_filename, partial_filename, normalization_filename = self.get_filenames(new_idx)
+            sdf_filename = self.get_filenames(new_idx)
             try:
-                return unpack_sdf_samples(sdf_filename, levelset_filename, partial_filename, normalization_filename, self.subsampleSDF, self.subsampleLevelset, self.context_mode), new_idx
+                return unpack_sdf_samples(sdf_filename, self.subsampleSDF), new_idx
             except (FileNotFoundError, ValueError) as e:
                 #print(e)
                 new_idx = (new_idx + 1) % len(self)
                 
-def meta_split_new(sdf_tensor):
+def meta_split(sdf_tensor):
     ######## Subsample half of the points as context
     context_inputs = []
     context_targets = []
@@ -247,56 +187,6 @@ def meta_split_new(sdf_tensor):
                     'query':(sdf_tensor[:,:,:3], sdf_tensor[:,:,3:])}
     return meta_data
     #########################
-        
-                
-def meta_split(sdf_tensor, levelset_tensor, context_mode):    
-    if context_mode == 'levelset':
-        xyz = sdf_tensor[:, :, 0:3]
-        sdf_gt = sdf_tensor[:, :, 3:4]
-        # Use levelset points, 0's as context; full sdf data as test
-        meta_data = {'context':(levelset_tensor, torch.zeros(levelset_tensor.shape[0], levelset_tensor.shape[1], 1)),
-                     'query':(xyz, sdf_gt)}
-        
-        return meta_data
-
-    elif context_mode == 'dense':
-        ######## Subsample half of the points as context
-        context_inputs = []
-        context_targets = []
-        test_inputs = []
-        test_targets = []
-        
-        batch_size = sdf_tensor.shape[0]
-        for b in range(batch_size):
-            idx = torch.randperm(sdf_tensor[b].shape[0]) # shuffle along points dimension
-            sdf_tensor[b] = sdf_tensor[b][idx]
-
-            context_length = sdf_tensor[b].shape[0]//2
-
-            context_inputs.append(sdf_tensor[b][:context_length, :3])
-            context_targets.append(sdf_tensor[b][:context_length, 3:])
-            test_inputs.append(sdf_tensor[b][context_length:, :3])
-            test_targets.append(sdf_tensor[b][context_length:, 3:])
-
-        context_inputs = torch.stack(context_inputs, dim=0)
-        context_targets = torch.stack(context_targets, dim=0)
-        test_inputs = torch.stack(test_inputs, dim=0)
-        test_targets = torch.stack(test_targets, dim=0)
-
-        meta_data = {'context':(context_inputs, context_targets),
-                     'query':(sdf_tensor[:,:,:3], sdf_tensor[:,:,3:])}
-        return meta_data
-        #########################
-    elif context_mode == 'partial': # Same as levelset right now, just loading different points
-        xyz = sdf_tensor[:, :, 0:3]
-        sdf_gt = sdf_tensor[:, :, 3:4]
-        # Use partial points, 0's as context; full sdf data as test
-        meta_data = {'context':(levelset_tensor, torch.zeros(levelset_tensor.shape[0], levelset_tensor.shape[1], 1)),
-                     'query':(xyz, sdf_gt)}
-        
-        return meta_data
-    else:
-        raise NotImplementedError
         
 def create_samples(N=256, max_batch = 32768, offset=None, scale=None):
     # NOTE: the voxel_origin is actually the (bottom, left, down) corner, not the middle

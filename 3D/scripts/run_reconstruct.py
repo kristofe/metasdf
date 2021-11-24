@@ -25,11 +25,6 @@ import argparse
 
 device = torch.device('cuda')
 
-################################################
-context_mode = 'dense'
-data_source = '/media/data3/sitzmann/ShapeNetProcessedData/data'
-
-################################################
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -51,4 +46,4 @@ if __name__ == '__main__':
     data_source = curriculum['data_source']
     npz_filenames = levelset_data.get_instance_filenames(data_source, split)
 
-    reconstruct(model, npz_filenames, reconstruction_output_dir, context_mode=context_mode, data_source=data_source)
+    reconstruct(model, npz_filenames, reconstruction_output_dir, data_source=data_source)

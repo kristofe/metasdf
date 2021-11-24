@@ -19,7 +19,7 @@ from modules import *
 max_batch = 2000000  # Make as big as your memory allows
 N=256
 
-def reconstruct(decoder, npz_filenames, reconstruction_dir, context_mode, data_source, skip=True, test_time_optim_steps=None):
+def reconstruct(decoder, npz_filenames, reconstruction_dir,  data_source, skip=True, test_time_optim_steps=None):
     if not os.path.isdir(reconstruction_dir):
         os.makedirs(reconstruction_dir)
 
@@ -27,25 +27,16 @@ def reconstruct(decoder, npz_filenames, reconstruction_dir, context_mode, data_s
         filename = os.path.splitext(npz)[0]
         instance_name = '/'.join(filename.split('/')[1:])
         sdf_filename = os.path.join(data_source, 'SdfSamples', filename) + '.npz'
-        #levelset_filename = os.path.join(data_source, 'SurfaceSamples', filename) + '.ply'
-        #partial_filename = os.path.join('/home/ericryanchan/depth_maps', instance_name, 'world_coords.ply')
-        #normalization_params_filename = os.path.join(data_source, 'NormalizationParameters', filename) + '.npz'
         if ("npz" not in npz or
             not os.path.exists(sdf_filename)):
             print("SDF Samples not found")
             continue
-        #if context_mode == 'levelset' and (not os.path.exists(levelset_filename) or not os.path.exists(normalization_params_filename)):
-        #    print("Levelset not found: ", levelset_filename)
-        #    continue
-        #if context_mode == 'partial' and (not os.path.exists(partial_filename) or not os.path.exists(normalization_params_filename)):
-        #    print("Partial not found: ", partial_filename)
-        #    continue
             
         mesh_filename = os.path.join(reconstruction_dir, npz[:-4])
         ply_filename = mesh_filename + '.ply'
 
         try:
-            reconstructed_sdf = generate_dense_cube(decoder, sdf_filename)#, levelset_filename, partial_filename, normalization_params_filename, context_mode, test_time_optim_steps=test_time_optim_steps)
+            reconstructed_sdf = generate_dense_cube(decoder, sdf_filename)
         except OSError as e:
             print(e)
             #print('OS Error?')
@@ -69,15 +60,15 @@ def reconstruct(decoder, npz_filenames, reconstruction_dir, context_mode, data_s
             level=0.0
         )
 
-def generate_dense_cube(decoder, sdf_filename, context_mode="dense",test_time_optim_steps=None):
-    #data_sdf = levelset_data.read_sdf_samples_into_ram(sdf_filename, levelset_filename, partial_filename, normalization_params_filename, context_mode=context_mode)
-    data_sdf = levelset_data.read_sdf_samples_into_ram_new(sdf_filename)
+def generate_dense_cube(decoder, sdf_filename, test_time_optim_steps=None):
+    data_sdf = levelset_data.read_sdf_samples_into_ram(sdf_filename)
 
     ####### Set up data #########
+    test_time_optim_steps = 6
 
-    sampled_data = levelset_data.unpack_sdf_samples_from_ram(data_sdf, subsampleSDF = 100000, subsampleLevelset = 10000)
+    sampled_data = levelset_data.unpack_sdf_samples_from_ram(data_sdf, subsampleSDF = 100000)
 
-    meta_data = levelset_data.meta_split_new(sampled_data['sdf'].unsqueeze(0))
+    meta_data = levelset_data.meta_split(sampled_data['sdf'].unsqueeze(0))
     ####### Use the given SDF samples as context to adapt the meta-network ##########
     context_x = meta_data['context'][0].cuda()
     context_y = meta_data['context'][1].cuda()

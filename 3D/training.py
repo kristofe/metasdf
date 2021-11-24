@@ -27,12 +27,12 @@ def train_epoch(model, dataloader, training_mode, context_mode, optimizer):
 
     for data_dict, indices in dataloader:
         sdf_tensor = data_dict['sdf'].cuda()
-        levelset_tensor = data_dict['levelset'].cuda()
+        #levelset_tensor = data_dict['levelset'].cuda()
 
         sdf_tensor.requires_grad = False
-        levelset_tensor.requires_grad = False
+        #levelset_tensor.requires_grad = False
 
-        meta_data = levelset_data.meta_split(sdf_tensor, levelset_tensor, context_mode)
+        meta_data = levelset_data.meta_split(sdf_tensor)
         
         prediction, _ = model(meta_data)
         query_y = meta_data['query'][1]
@@ -85,9 +85,8 @@ def val_epoch(model, dataloader, training_mode, context_mode):
     for data_dict, indices in dataloader:
         with torch.no_grad():
             sdf_tensor = data_dict['sdf'].cuda()
-            levelset_tensor = data_dict['levelset'].cuda()
 
-            meta_data = levelset_data.meta_split(sdf_tensor, levelset_tensor, context_mode)            
+            meta_data = levelset_data.meta_split(sdf_tensor)
             
             query_y = meta_data['query'][1]
             prediction, _ = model(meta_data)
