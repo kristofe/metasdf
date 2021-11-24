@@ -121,15 +121,11 @@ class LevelsetDataset(torch.utils.data.Dataset):
         data_source,
         split,
         subsampleSDF,
-        subsampleLevelset,
-        context_mode,
         load_ram=False,
         print_filename=False,
         num_files=1000000,
     ):
         self.subsampleSDF = subsampleSDF
-        self.subsampleLevelset = subsampleLevelset
-        self.context_mode = context_mode
 
         self.data_source = data_source
         self.npyfiles = get_instance_filenames(data_source, split)

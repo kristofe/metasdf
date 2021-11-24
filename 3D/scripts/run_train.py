@@ -91,4 +91,4 @@ if __name__ == '__main__':
         scheduler.load_state_dict(checkpoint['scheduler_state_dict'])
         start_epoch = checkpoint['epoch'] + 1
 
-    train(model, optimizer, scheduler, dataloader, start_epoch, curriculum['num_epochs'], curriculum['training_mode'], curriculum['context_mode'], output_dir=curriculum['output_dir'], val_dataloader=val_dataloader)
+    train(model, optimizer, scheduler, dataloader, start_epoch, curriculum['num_epochs'], curriculum['training_mode'],  output_dir=curriculum['output_dir'], val_dataloader=val_dataloader)

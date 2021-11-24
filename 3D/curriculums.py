@@ -78,7 +78,7 @@ planes_test_pe = {
     'data_source': '../data/', # Preprocessed data folder, following DeepSDF
     'num_epochs': 3000,
     'training_mode': 'multitask', # Either 'multitask' for composite loss or 'l1' for simple loss
-    'SDFSamplesPerScene': 8000, # Number of SDF samples drawn per scene, per iteration
+    'SDFSamplesPerScene': 20000, # Number of SDF samples drawn per scene, per iteration
     'ScenesPerBatch': 3, # Meta-batch size
     'output_dir': 'model_parameters/planes_tiny_relu', # Directory to save parameters and tensorboard files
     'reconstruction_output_dir': 'reconstructions/planes_tiny_pe', # Directory to save reconstructions, only used during reconstruction
