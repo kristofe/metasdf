@@ -38,7 +38,7 @@ device = torch.device('cuda')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--exp_name', type=str, default='')
+    parser.add_argument('--exp_name', type=str, default='planes_test_relu')
     parser.add_argument('--load', action='store_true', default=False)
     
     args = parser.parse_args()
