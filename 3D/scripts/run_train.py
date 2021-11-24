@@ -14,6 +14,17 @@ import numpy as np
 
 sys.path.append('..')
 sys.path.append('../..')
+
+####################################################################################
+####################################################################################
+#               HACK FOR RUNNING INSIDE VSCODE
+#sys.path.append( os.path.dirname( os.path.dirname( os.path.abspath(__file__) ) ) )
+thispath =  os.path.dirname( os.path.abspath(__file__) )
+os.chdir(thispath)
+sys.path.append('/home/kristofe/Documents/Projects/metasdf/3D')
+####################################################################################
+####################################################################################
+
 from levelset_data import LevelsetDataset
 import levelset_data
 import argparse
@@ -27,11 +38,14 @@ device = torch.device('cuda')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('exp_name', type=str)
-    parser.add_argument('--load', action='store_true')
+    parser.add_argument('--exp_name', type=str, default='')
+    parser.add_argument('--load', action='store_true', default=False)
     
     args = parser.parse_args()
     
+    args.exp_name = 'planes_test_relu'
+    print(os.getcwd())
+
     curriculum = getattr(curriculums, args.exp_name)        
     
     if not os.path.isdir(curriculum['output_dir']):
