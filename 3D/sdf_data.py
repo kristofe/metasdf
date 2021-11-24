@@ -59,32 +59,28 @@ def remove_nans(tensor):
 
 def read_sdf_samples_into_ram(sdf_filename):
     sdf_npz = np.load(sdf_filename, allow_pickle=True)
-    pos_tensor = remove_nans(torch.from_numpy(sdf_npz["pos"]))
-    neg_tensor = remove_nans(torch.from_numpy(sdf_npz["neg"]))
-    
-    levelset_tensor = torch.zeros((1,))
-    partial_tensor = torch.zeros((1,))
-    
-    
-    return [pos_tensor, neg_tensor]
-
+    return remove_nans(torch.from_numpy(sdf_npz["sdf_points"]))
 
 def unpack_sdf_samples(sdf_filename, subsampleSDF):
     npz = np.load(sdf_filename)
 
-    pos_tensor = remove_nans(torch.from_numpy(npz["pos"]))
-    neg_tensor = remove_nans(torch.from_numpy(npz["neg"]))
+    tens =  remove_nans(torch.from_numpy(npz["sdf_points"]))
+    random_tens = (torch.rand(int(subsampleSDF)) * tens.shape[0]).long()
+    sample = torch.index_select(tens, 0, random_tens)
+
+    #pos_tensor = remove_nans(torch.from_numpy(npz["pos"]))
+    #neg_tensor = remove_nans(torch.from_numpy(npz["neg"]))
 
     # split the sample into half
-    half = int(subsampleSDF / 2)
+    #half = int(subsampleSDF / 2)
 
-    random_pos = (torch.rand(half) * pos_tensor.shape[0]).long()
-    random_neg = (torch.rand(half) * neg_tensor.shape[0]).long()
+    #random_pos = (torch.rand(half) * pos_tensor.shape[0]).long()
+    #random_neg = (torch.rand(half) * neg_tensor.shape[0]).long()
     
-    sample_pos = torch.index_select(pos_tensor, 0, random_pos)
-    sample_neg = torch.index_select(neg_tensor, 0, random_neg)
+    #sample_pos = torch.index_select(pos_tensor, 0, random_pos)
+    #sample_neg = torch.index_select(neg_tensor, 0, random_neg)
 
-    samples = torch.cat([sample_pos, sample_neg], 0)
+    #samples = torch.cat([sample_pos, sample_neg], 0)
     
         
     return {'sdf': samples}
@@ -138,7 +134,7 @@ class SDFDataset(torch.utils.data.Dataset):
     
     def get_filenames(self, new_idx):
         instance_name = os.path.splitext(self.npyfiles[new_idx])[0]
-        sdf_filename = os.path.join(self.data_source, 'SdfSamples', self.npyfiles[new_idx])
+        sdf_filename = os.path.join(self.data_source, self.npyfiles[new_idx])
         return sdf_filename 
 
     def __getitem__(self, idx):        
