@@ -61,10 +61,10 @@ if __name__ == '__main__':
         val_split = json.load(f)
         
     dataset = LevelsetDataset(
-        curriculum['data_source'], train_split, context_mode=curriculum['context_mode'], subsampleSDF=curriculum['SDFSamplesPerScene'], subsampleLevelset=curriculum['LevelsetSamplesPerScene'], load_ram=False
+        curriculum['data_source'], train_split, context_mode=curriculum['context_mode'], subsampleSDF=curriculum['SDFSamplesPerScene'], subsampleLevelset=curriculum['LevelsetSamplesPerScene'], load_ram=True
     )
     val_dataset = LevelsetDataset(
-        curriculum['data_source'], val_split, context_mode=curriculum['context_mode'], subsampleSDF=curriculum['SDFSamplesPerScene'], subsampleLevelset=curriculum['LevelsetSamplesPerScene'], load_ram=False
+        curriculum['data_source'], val_split, context_mode=curriculum['context_mode'], subsampleSDF=curriculum['SDFSamplesPerScene'], subsampleLevelset=curriculum['LevelsetSamplesPerScene'], load_ram=True
     )
         
     dataloader = data_utils.DataLoader(

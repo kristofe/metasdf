@@ -35,11 +35,6 @@ def train_epoch(model, dataloader, training_mode, context_mode, optimizer):
         meta_data = levelset_data.meta_split(sdf_tensor, levelset_tensor, context_mode)
         
         prediction, _ = model(meta_data)
-#         context_x, context_y = meta_batch['context']
-#         query_x, query_y = meta_batch['query']
-        
-#         fast_params = model.generate_params(context_x, context_y)
-#         prediction = model(query_x, fast_params)
         query_y = meta_data['query'][1]
 
         if training_mode == 'multitask':
@@ -94,14 +89,8 @@ def val_epoch(model, dataloader, training_mode, context_mode):
 
             meta_data = levelset_data.meta_split(sdf_tensor, levelset_tensor, context_mode)            
             
-#             context_x, context_y = meta_batch['context']
-#             query_x, query_y = meta_batch['query']
             query_y = meta_data['query'][1]
-        
-        
             prediction, _ = model(meta_data)
-            # fast_params = model.generate_params(context_x, context_y)
-            # prediction = model(query_x, fast_params)
 
             if training_mode == 'multitask':
                 gt_sign = (query_y > 0).float()
