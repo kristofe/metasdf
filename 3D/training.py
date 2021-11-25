@@ -65,7 +65,7 @@ def train_epoch(model, dataloader, training_mode, optimizer):
         else:
             raise NotImplementedError
 
-        print(batch_loss.item())
+        #print(batch_loss.item())
         epoch_train_loss += batch_loss.item()
 
         optimizer.zero_grad()
@@ -119,7 +119,7 @@ def val_epoch(model, dataloader, training_mode):
             else:
                 raise NotImplementedError
 
-            print(batch_loss.item())
+            #print(batch_loss.item())
             epoch_loss += batch_loss.item()
 
     epoch_misclassification_percentage/=len(dataloader)
