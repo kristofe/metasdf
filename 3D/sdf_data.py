@@ -66,7 +66,7 @@ def unpack_sdf_samples(sdf_filename, subsampleSDF):
 
     tens =  remove_nans(torch.from_numpy(npz["sdf_points"]))
     random_tens = (torch.rand(int(subsampleSDF)) * tens.shape[0]).long()
-    sample = torch.index_select(tens, 0, random_tens)
+    samples = torch.index_select(tens, 0, random_tens)
 
     #pos_tensor = remove_nans(torch.from_numpy(npz["pos"]))
     #neg_tensor = remove_nans(torch.from_numpy(npz["neg"]))
@@ -87,6 +87,9 @@ def unpack_sdf_samples(sdf_filename, subsampleSDF):
 
 
 def unpack_sdf_samples_from_ram(data, subsampleSDF):
+    random_tens = (torch.rand(int(subsampleSDF)) * data.shape[0]).long()
+    samples = torch.index_select(data, 0, random_tens)
+    '''
     pos_tensor = data[0]
     neg_tensor = data[1]
     
@@ -103,6 +106,7 @@ def unpack_sdf_samples_from_ram(data, subsampleSDF):
     sample_neg = torch.index_select(neg_tensor, 0, random_neg)
 
     samples = torch.cat([sample_pos, sample_neg], 0)
+    '''
 
     return {'sdf': samples}
 

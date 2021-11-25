@@ -79,14 +79,14 @@ if __name__ == '__main__':
         dataset,
         batch_size=curriculum['ScenesPerBatch'],
         shuffle=True,
-        num_workers=16,
+        num_workers=8,
         drop_last=False,
     )
     val_dataloader = data_utils.DataLoader(
         val_dataset,
         batch_size=curriculum['ScenesPerBatch'],
         shuffle=True,
-        num_workers=16,
+        num_workers=8,
         drop_last=False,
     )
 
