@@ -17,8 +17,8 @@ torch.backends.cudnn.benchmark = True
 from meta_modules import *
 from modules import *
 
-max_batch = 20000  # Make as big as your memory allows
-#max_batch = 2000000  # Make as big as your memory allows
+#max_batch = 20000  # Make as big as your memory allows
+max_batch = 2000000  # Make as big as your memory allows
 N=256
 
 def reconstruct(decoder, npz_filenames, reconstruction_dir,  data_source, skip=True, test_time_optim_steps=None):
@@ -67,7 +67,7 @@ def generate_dense_cube(decoder, sdf_filename, test_time_optim_steps=None):
     data_sdf = sdf_data.read_sdf_samples_into_ram(sdf_filename)
 
     ####### Set up data #########
-    test_time_optim_steps = 6
+    test_time_optim_steps = 3
 
     sampled_data = sdf_data.unpack_sdf_samples_from_ram(data_sdf, subsampleSDF = 100000)
 

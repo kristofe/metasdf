@@ -60,10 +60,10 @@ chairs_kds_pe = {
     'val_split': '../splits/chair_test.json',    # Val split if you have one
     'test_split': '../splits/chair_test.json',   # Test split, used only for reconstruction
     'data_source': '../data/point_samples', # Preprocessed data folder, following DeepSDF
-    'num_epochs': 3000,
+    'num_epochs': 300,
     'training_mode': 'multitask', # Either 'multitask' for composite loss or 'l1' for simple loss
-    'SDFSamplesPerScene': 800, # Number of SDF samples drawn per scene, per iteration
-    'ScenesPerBatch': 20, # Meta-batch size
+    'SDFSamplesPerScene': 24000, # Number of SDF samples drawn per scene, per iteration
+    'ScenesPerBatch': 32, # Meta-batch size
     'output_dir': 'model_parameters/chairs_kds_relu', # Directory to save parameters and tensorboard files
     'reconstruction_output_dir': 'reconstructions/chairs_kds_pe', # Directory to save reconstructions, only used during reconstruction
     'lr': 5e-4,
