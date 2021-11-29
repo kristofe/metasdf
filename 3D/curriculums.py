@@ -62,8 +62,8 @@ chairs_kds_pe = {
     'data_source': '../data/point_samples', # Preprocessed data folder, following DeepSDF
     'num_epochs': 300,
     'training_mode': 'multitask', # Either 'multitask' for composite loss or 'l1' for simple loss
-    'SDFSamplesPerScene': 24000, # Number of SDF samples drawn per scene, per iteration
-    'ScenesPerBatch': 32, # Meta-batch size
+    'SDFSamplesPerScene': 2400, # Number of SDF samples drawn per scene, per iteration
+    'ScenesPerBatch': 16, # Meta-batch size
     'output_dir': 'model_parameters/chairs_kds_relu', # Directory to save parameters and tensorboard files
     'reconstruction_output_dir': 'reconstructions/chairs_kds_pe', # Directory to save reconstructions, only used during reconstruction
     'lr': 5e-4,

@@ -59,12 +59,12 @@ def remove_nans(tensor):
 
 def read_sdf_samples_into_ram(sdf_filename):
     sdf_npz = np.load(sdf_filename, allow_pickle=True)
-    return remove_nans(torch.from_numpy(sdf_npz["sdf_points"]))
+    return remove_nans(torch.from_numpy(sdf_npz["sdf_points"]))[:,0:4] #Forcibly remove the divergence channel if it is in there
 
 def unpack_sdf_samples(sdf_filename, subsampleSDF):
     npz = np.load(sdf_filename)
 
-    tens =  remove_nans(torch.from_numpy(npz["sdf_points"]))
+    tens =  remove_nans(torch.from_numpy(npz["sdf_points"]))[:,0:4] #Forcibly remove the divergence channel if it is in there
     random_tens = (torch.rand(int(subsampleSDF)) * tens.shape[0]).long()
     samples = torch.index_select(tens, 0, random_tens)
 
